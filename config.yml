@@ -36,6 +36,7 @@ profiles:
     envFiles:
       - ./.env.ips
     dev: true
+    
 
   - name: ips-testbed-deploy-ig
     packages:

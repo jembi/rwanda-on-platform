@@ -1,8 +1,8 @@
 version: '3.9'
 
 services:
-  ocl-mapping-mediator:
-    image: ocl-mapping-mediator
+  rwanda-custom-mapping-mediator:
+    image: rwanda-custom-mapping-mediator
     env_file: .env
     networks:
             openhim:

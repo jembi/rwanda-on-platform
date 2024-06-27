@@ -5,30 +5,21 @@ import uuid
 import json
 import requests
 import environ
-import datetime
 from django.http import HttpResponse, JsonResponse
-
 from apps.rwandaApp.views.common import getUrl
-from rest_framework.permissions import IsAuthenticated
-from rest_framework import permissions
 import requests
 import json
 env = environ.Env(
     # set casting, default value
     DEBUG=(bool, False)
 )
-import socket
-import sys
-IPAddr = "192.168.1.12"
+# IPAddr = "192.168.1.12"
+IPAddr = "openhim-core"
+
 class LabUUIDView(APIView):
 
     def post(self, request):
         try:
-            hostname = socket.gethostname()
-
-            print("...................")
-
-
             json_data = request.data
             json_data["id"] = str(uuid.uuid4())
             json_data["specimenID"] = str(uuid.uuid4())
@@ -66,7 +57,6 @@ class LabUUIDView(APIView):
             json_data["vlResultAbsoluteDecimal"] = 25
             json_data["fundingOrganizationID"] = str(uuid.uuid4())
             json_data["implementingPartnerOrganizationID"] = str(uuid.uuid4())
-            #print(json_data)
 
             # call mapping meditor here
             url = "http://"+IPAddr+":5001/lab-order"
@@ -77,11 +67,12 @@ class LabUUIDView(APIView):
             }
 
             response = requests.request("POST", url, headers=headers, data=payload)
-
-            #print(response.text)
-            return Response(json.loads(response.text))
-            # return Response(json.loads(payload))
-
+            
+            if response.status_code == 200:
+                 return Response(json.loads(response.text))
+            else:
+                print(f"Request failed with status {response.status_code}: {response.text}")
+                return Response({"Error": "An internal server error occurred"}, status=response.status_code)
 
         except Exception as e:
             print(e)
@@ -103,21 +94,20 @@ class LabOrderSourceIdView(APIView):
 
     def post(self, request):
         try:
+            url = "http://" + IPAddr + ":5001/vlsm/order"
             print(request.data)
             json_data = request.data
             json_data["labsourceid"] = str(uuid.uuid4())
-
-
-            url = "http://" + IPAddr + ":5001/vlsm/order"
-
             payload = json.dumps(json_data)
             headers = {
                 'Content-Type': 'application/json'
             }
             response = requests.request("POST", url, headers=headers, data=payload)
-
-            # print(response.text)
-            return Response(json.loads(response.text))
+            if response.status_code == 200:
+                return Response(json.loads(response.text))
+            else:
+                print(f"Request failed with status {response.status_code}: {response.text}")
+                return Response({"Error": "An internal server error occurred"}, status=response.status_code)
 
         except Exception as e:
             print(e)

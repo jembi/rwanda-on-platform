@@ -9,6 +9,8 @@ services:
     configs:
       - source: mediator-config-metadata.js
         target: /metadata.js
+      - source: mediator-config-jsonToFhirLabOrder.json
+        target: /jsonToFhirLabOrder.json
     networks:
       mapping-mediator:
     # This command will only attempt to import the config when the uptime responds with a 2xx
@@ -21,6 +23,11 @@ configs:
     name: mediator-config-metadata.js-${mediator_config_metadata_js_DIGEST:?err}
     labels:
       name: jempi
+  mediator-config-jsonToFhirLabOrder.json:
+      file: ./jsonToFhirLabOrder.json
+      name: mediator-config-jsonToFhirLabOrder.json-${mediator_config_jsonToFhirLabOrder_json_DIGEST:?err}
+      labels:
+        name: fhir
 
 networks:
   mapping-mediator:
