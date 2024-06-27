@@ -1,0 +1,13 @@
+version: '3.9'
+
+services:
+  ocl-mapping-mediator:
+    image: ocl-mapping-mediator
+    env_file: .env
+    networks:
+            openhim:
+
+networks:
+  openhim:
+    name: openhim_public
+    external: true

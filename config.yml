@@ -1,0 +1,81 @@
+---
+projectName: rwanda-on-platform
+image: jembi/platform:latest
+logPath: /tmp/logs
+
+packages:
+  - rwanda-on-platform
+  - reverse-proxy-nginx
+  - fhir-datastore-hapi-fhir
+  - openhim-mapping-mediator
+  - mapping-mediator
+  - interoperability-layer-openhim
+  - monitoring
+
+customPackages:
+  - id: rwanda-on-platform
+    path: ../rwanda-on-platform
+  - id: mapping-mediator
+    path: ./mapping_mediator
+
+profiles:
+  - name: ips-testbed-cluster
+    packages:
+      - reverse-proxy-nginx
+      - rwanda-on-platform
+      - monitoring
+    envFiles:
+      - ./.env.cluster
+    dev: true
+
+  - name: ips-testbed
+    packages:
+      - reverse-proxy-nginx
+      - rwanda-on-platform
+      - monitoring
+    envFiles:
+      - ./.env.ips
+    dev: true
+
+  - name: ips-testbed-deploy-ig
+    packages:
+      - fhir-datastore-hapi-fhir
+      - rwanda-on-platform
+    envFiles:
+      - ./.env.ips
+    dev: true
+    only: true
+
+  - name: local
+    packages:
+      - rwanda-on-platform
+      - monitoring
+    envFiles:
+      - ./.env.local
+    dev: true
+
+  - name: local-deploy-ig
+    packages:
+      - fhir-datastore-hapi-fhir
+      - rwanda-on-platform
+    envFiles:
+      - ./.env.local
+    dev: true
+    only: true
+
+  - name: qa
+    packages:
+      - rwanda-on-platform
+      - reverse-proxy-nginx
+    envFiles:
+      - ./.env.qa
+    dev: false
+
+  - name: qa-deploy-ig
+    packages:
+      - fhir-datastore-hapi-fhir
+      - rwanda-on-platform
+    envFiles:
+      - ./.env.qa
+    dev: false
+    only: true

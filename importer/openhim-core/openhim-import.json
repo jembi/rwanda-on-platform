@@ -1,0 +1,62 @@
+{
+  "Channels": [
+    {
+      "name": "FHIR Server",
+      "description": "A FHIR server (HAPI FHIR)",
+      "urlPattern": "^/raw-fhir.*$",
+      "isAsynchronousProcess": false,
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "type": "http",
+      "priority": 1,
+      "tcpPort": null,
+      "tcpHost": null,
+      "pollingSchedule": null,
+      "requestBody": true,
+      "responseBody": true,
+      "allow": [
+        "instant"
+      ],
+      "whitelist": [],
+      "authType": "private",
+      "routes": [
+        {
+          "name": "FHIR Server",
+          "type": "http",
+          "status": "enabled",
+          "secured": false,
+          "host": "hapi-fhir",
+          "port": 8080,
+          "path": "",
+          "pathTransform": "s/raw-//g",
+          "primary": true,
+          "username": "",
+          "password": "",
+          "forwardAuthHeader": false
+        }
+      ],
+      "matchContentTypes": [],
+      "matchContentRegex": null,
+      "matchContentXpath": null,
+      "matchContentJson": null,
+      "matchContentValue": null,
+      "properties": [],
+      "txViewAcl": [],
+      "txViewFullAcl": [],
+      "txRerunAcl": [],
+      "alerts": [],
+      "status": "enabled",
+      "rewriteUrls": false,
+      "addAutoRewriteRules": true,
+      "rewriteUrlsConfig": [],
+      "autoRetryEnabled": false,
+      "autoRetryPeriodMinutes": 60,
+      "updatedBy": {
+        "id": "65e1e4efa8321c79f2ec73af",
+        "name": "Super User"
+      }
+    }
+  ]
+}

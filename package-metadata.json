@@ -1,0 +1,26 @@
+{
+  "id": "rwanda-on-platform",
+  "description": "Rwanda Platform",
+  "name": "Rwanda Platform",
+  "type": "infrastructure",
+  "version": "0.1.0",
+  "dependencies": [
+    "openhim-mapping-mediator",
+    "mapping-mediator",
+    "fhir-datastore-hapi-fhir"
+  ],
+  "environmentVariables": {
+    "HAPI_FHIR_INSTANCES": "1",
+    "HAPI_SERVER_URL": "http://hapi-fhir:8080/fhir",
+    "FHIR_IG_URL": "https://openhie.github.io/HIV-CBS",
+    "FHIR_STACKNAME": "hapi-fhir",
+    "OPENHIM_TRANSACTION_URL": "http://openhim-core:5001",
+    "OPENHIM_MEDIATOR_URL": "https://openhim-core:8080",
+    "OPENHIM_ROOT_PASSWORD": "instant101",
+    "OPENHIM_STACKNAME": "openhim",
+    "OPENHIM_MAPPING_MEDIATOR_STACKNAME": "openhim-mapping-mediator",
+    "TRUST_SELF_SIGNED": "true",
+    "NODE_TLS_REJECT_UNAUTHORIZED": "0",
+    "DISABLE_VALIDATION": "false"
+  }
+}

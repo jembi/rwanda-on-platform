@@ -1,0 +1,12 @@
+{
+  "id": "mapping-mediator",
+  "name": "Custom Rwanda Mapping Mediator",
+  "description": "Custom Rwanda terminology mapping of FHIR resources",
+  "type": "infrastructure",
+  "version": "0.0.1",
+  "dependencies": ["interoperability-layer-openhim"],
+  "environmentVariables": {
+  	"OPENHIM_URL": "openhim-core",
+	"OPENHIM_PORT": "5001"
+  }
+}
