@@ -1526,9 +1526,7 @@
         "headers": {
           "contentType": "application/json"
         },
-        "url": "http://197.243.18.12:8085/hapi-fhir-jpaserver/fhir"
-      //   "url": "http://openhim-core:5001/raw-fhir"
-
+        "url": "http://openhim-core:5001/raw-fhir"
       },
       "extract": {
         "JeMPIResponse": "$.body"
