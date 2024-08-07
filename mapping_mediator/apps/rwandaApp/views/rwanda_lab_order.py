@@ -23,9 +23,9 @@ class LabUUIDView(APIView):
             json_data = request.data
             json_data["id"] = str(uuid.uuid4())
             json_data["specimenID"] = str(uuid.uuid4())
-            json_data["organizationID"] = str(uuid.uuid4())
-            json_data["requestingOrganizationID"] = str(uuid.uuid4())
-            json_data["performingOrganizationID"] = str(uuid.uuid4())
+            json_data["organizationID"] = "RequestingOrganizationExample"
+            json_data["requestingOrganizationID"] = "requestingOrganizationID"
+            json_data["performingOrganizationID"] = "performingOrganizationID"
             json_data["serviceRequestID"] = str(uuid.uuid4())
             json_data["requestingPractitionerID"] = str(uuid.uuid4())
             json_data["performingPractitionerID"] = str(uuid.uuid4())
