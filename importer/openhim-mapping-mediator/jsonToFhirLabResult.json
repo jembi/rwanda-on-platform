@@ -88,14 +88,17 @@
     "exValueIntegerActivityDefinition": "$exists(requestBody.revisedBy) ? requestBody.revisedBy : null",
     "dateActivityDefinition": "$exists(requestBody.revisedOn) ? requestBody.revisedOn : null",
     "lastReviewDateActivityDefinition": "$exists(requestBody.reviewedOn) ? requestBody.reviewedOn : null",
-    "editorNameActivityDefinition": "$exists(requestBody.revisedByName) ? requestBody.revisedByName : null",
+    "editorNameActivityDefinition": "$exists(requestBody.revisedBy) ? requestBody.revisedBy : null",
     "reviewerValueIntegerActivityDefinition":"$exists(requestBody.reviewedBy) ? requestBody.reviewedBy : null",
     "endorserValueIntegerActivityDefinition":"$exists(requestBody.approvedBy) ? requestBody.approvedBy : null",
     "requestUrlActivityDefinition": "$exists(requestBody.labOrderTaskActivityID) ? 'ActivityDefinition/' & requestBody.labOrderTaskActivityID : null"
 
   },
   "inputMapping": {
-    
+    "constants.resourceType":"resourceType",
+    "constants.id": "id",
+    "constants.type":"type",
+
     "transforms.fullUrlTask":"entry[0].fullUrl",
     "constants.resourceTypeTask":"entry[0].resource.resourceType",
     "transforms.resourceIdTask":"entry[0].resource.id",
@@ -252,6 +255,7 @@
   "constants": {
     "resourceType": "Bundle",
     "type": "transaction",
+    "id": "LabResult",
 
 
     "resourceTypeTask": "Task",
@@ -349,7 +353,7 @@
         "headers": {
           "contentType": "application/json"
         },
-        "url": "http://rwanda-custom-mapping-mediator:8084/lab-orders"
+        "url": "http://192.168.23.81:8086/lab-orders"
 
       },
       "extract": {

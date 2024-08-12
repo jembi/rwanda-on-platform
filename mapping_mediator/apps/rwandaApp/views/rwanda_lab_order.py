@@ -128,3 +128,65 @@ class LabOrderSourceIdView(APIView):
         except Exception as e:
             print(e)
             return Response({"Error":"An internal server error occurred", "Exceptation":str(e)}, status=500)
+
+
+class LabResult(APIView):
+
+    def get(self, request):
+        try:
+            print(request.data)
+            lab_result_data = request.data
+            identifier = "221214-9257-1130"
+            subject = lab_result_data.get("patientId")
+            occurrence = "2012-01-05"
+            url = "http://" + OPENHIM_HOST + ":3447/fhir/ServiceRequest?identifier="+ identifier +"&subject="+ subject+"&occurrence="+occurrence
+            payload = {}
+            headers = {}
+            print(url)
+            response = requests.request("GET", url, headers=headers, data=payload)
+
+            print(response.text)
+            if response.status_code == 200:
+                data = json.loads(response.text)
+                for patient in data.get("entry"):
+                    patientID = patient.get("resource").get("subject").get("reference")
+                    encounterID = patient.get("resource").get("encounter").get("reference")
+                    organizationID = patient.get("resource").get("note")[0].get("authorReference").get("reference")
+                    performingPractitionerID = patient.get("resource").get("performer")[0].get("reference")
+                    resultsInterpreterID = patient.get("resource").get("subject").get("reference")
+                    serviceRequestID = patient.get("resource").get("id")
+
+                    lab_result_data["patientID"] = patientID.split('/')[-1]
+                    lab_result_data["encounterID"]=encounterID.split('/')[-1]
+                    lab_result_data["organizationID"] = organizationID.split('/')[-1]
+                    lab_result_data["performingPractitionerID"] = performingPractitionerID.split('/')[-1]
+                    lab_result_data["resultsInterpreterID"] = resultsInterpreterID.split('/')[-1]
+                    lab_result_data["serviceRequestID"] = serviceRequestID.split('/')[-1]
+
+                    lab_result_data["hivLabResultTaskID"] = str(uuid.uuid4())
+                    lab_result_data["labOrderTaskActivityID"] = str(uuid.uuid4())
+                    lab_result_data["hivLabResultsDiagnosticReportExampleID"] = str(uuid.uuid4())
+                    lab_result_data["hivTestResultViralLoadLogID"] = str(uuid.uuid4())
+                    lab_result_data["hivTestResultAbsoluteDecimalID"] = str(uuid.uuid4())
+                    lab_result_data["hivTestResultID"] = str(uuid.uuid4())
+
+
+
+
+                url = "http://" + OPENHIM_HOST + ":" + OPENHIM_PORT + "/lab-orders"
+                print("...................................c............................")
+                print(lab_result_data)
+                payload = json.dumps(lab_result_data)
+                headers = {
+                    'Content-Type': 'application/json'
+                }
+
+                response = requests.request("POST", url, headers=headers, data=payload)
+
+                print(response.text)
+                print("....../././")
+                return Response(json.loads(response.text))
+
+        except Exception as e:
+            print(e)
+            return Response({"Error":"An internal server error occurred", "Exceptation":str(e)}, status=500)
