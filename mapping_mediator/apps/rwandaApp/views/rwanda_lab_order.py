@@ -13,8 +13,12 @@ env = environ.Env(
     # set casting, default value
     DEBUG=(bool, False)
 )
-# IPAddr = "192.168.1.12"
-IPAddr = "openhim-core"
+
+OPENHIM_PORT = env('OPENHIM_PORT')
+OPENHIM_HOST = env('OPENHIM_HOST')
+ORGANIZATION_ID=env('ORGANIZATION_ID')
+REQUESTING_ORGANIZATION_ID=env('REQUESTING_ORGANIZATION_ID')
+PERFORMING_ORGANIZATION_ID=env('PERFORMING_ORGANIZATION_ID')
 
 class LabUUIDView(APIView):
 
@@ -23,9 +27,9 @@ class LabUUIDView(APIView):
             json_data = request.data
             json_data["id"] = str(uuid.uuid4())
             json_data["specimenID"] = str(uuid.uuid4())
-            json_data["organizationID"] = "RequestingOrganizationExample"
-            json_data["requestingOrganizationID"] = "requestingOrganizationID"
-            json_data["performingOrganizationID"] = "performingOrganizationID"
+            json_data["organizationID"] = ORGANIZATION_ID
+            json_data["requestingOrganizationID"] = REQUESTING_ORGANIZATION_ID
+            json_data["performingOrganizationID"] = PERFORMING_ORGANIZATION_ID
             json_data["serviceRequestID"] = str(uuid.uuid4())
             json_data["requestingPractitionerID"] = str(uuid.uuid4())
             json_data["performingPractitionerID"] = str(uuid.uuid4())
@@ -59,7 +63,7 @@ class LabUUIDView(APIView):
             json_data["implementingPartnerOrganizationID"] = str(uuid.uuid4())
 
             # call mapping meditor here
-            url = "http://"+IPAddr+":5001/lab-order"
+            url = "http://"+OPENHIM_HOST+":"+OPENHIM_PORT+"/lab-order"
             print(url)
             payload = json.dumps(json_data)
             headers = {
@@ -67,7 +71,7 @@ class LabUUIDView(APIView):
             }
 
             response = requests.request("POST", url, headers=headers, data=payload)
-            
+
             if response.status_code == 200:
                  return Response(json.loads(response.text))
             else:
@@ -90,11 +94,23 @@ class LabView(APIView):
             return Response({"Error":"An internal server error occurred", "Exceptation":str(e)}, status=500)
 
 
+class LabView(APIView):
+
+    def post(self, request):
+        try:
+            print(request.data)
+            return Response(request.data)# "uniqueId": "1h288",
+
+        except Exception as e:
+            print(e)
+            return Response({"Error":"An internal server error occurred", "Exceptation":str(e)}, status=500)
+
 class LabOrderSourceIdView(APIView):
 
     def post(self, request):
         try:
-            url = "http://" + IPAddr + ":5001/vlsm/order"
+            url = "http://"+OPENHIM_HOST+":"+OPENHIM_PORT+"/vlsm/order"
+
             print(request.data)
             json_data = request.data
             json_data["labsourceid"] = str(uuid.uuid4())
