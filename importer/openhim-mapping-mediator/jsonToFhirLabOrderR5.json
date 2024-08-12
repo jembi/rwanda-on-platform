@@ -14,7 +14,10 @@
     "fullUrlPatient": "$exists(requestBody.patientId) ? 'Patient/' & requestBody.patientId : null",
     "referencePatient": "$exists(requestBody.organizationID) ? 'Organization/' & requestBody.organizationID : null",
     "requestUrlPatient": "$exists(requestBody.patientId) ? 'Patient/' & requestBody.patientId : null",
-   
+    "ageInYears": "$exists(requestBody.ageInYears) ?  requestBody.ageInYears : null",
+    "ageInMonths": "$exists(requestBody.ageInYears) ?  requestBody.ageInYears : null",
+
+
     "fullUrlSpecimen": "$exists(requestBody.specimenID) ? 'Specimen/' & requestBody.specimenID : null",
     "resourceIdSpecimen": "$exists(requestBody.specimenID) ? requestBody.specimenID : null",
     "requestUrlSpecimen": "$exists(requestBody.specimenID) ? 'Specimen/' & requestBody.specimenID : null",
@@ -36,7 +39,7 @@
     "requestUrlPerfORG": "$exists(requestBody.performingOrganizationID) ? 'Organization/' & requestBody.performingOrganizationID : null",
 
     "fullUrlServiceReq": "$exists(requestBody.serviceRequestID) ? 'ServiceRequest/' & requestBody.serviceRequestID : null",
-    "valueServiceReq": "$exists(requestBody.labsourceid) ? requestBody.labsourceid : null",
+    "valueServiceReq": "$exists(requestBody.upid) ? requestBody.upid : null",
     "resourceIdServiceReq": "$exists(requestBody.serviceRequestID) ? requestBody.serviceRequestID : null",
     "subjectReferenceServiceReq": "$exists(requestBody.patientId) ? 'Patient/' & requestBody.patientId : null",
     "encounterReferenceServiceReq": "$exists(requestBody.encounterID) ? 'Encounter/' & requestBody.encounterID : null", 
@@ -125,10 +128,11 @@
     "encounterReferenceObAartRegimenSwitch": "$exists(requestBody.encounterID) ? 'Encounter/' & requestBody.encounterID : null", 
     "notereferenceObAartRegimenSwitch": "$exists(requestBody.organizationID) ? 'Organization/' & requestBody.organizationID : null",
     "requestUrlObAartRegimenSwitch": "$exists(requestBody.artRegimenSwitchedOrSubstitutedID) ? 'Observation/' & requestBody.artRegimenSwitchedOrSubstitutedID : null",
-    "valueBooleanObAartRegimenSwitch": "$exists(requestBody.breastfeeding) ? requestBody.breastfeeding : 'true'",
-
-
-
+    "dateOfArvRegimenChange": "$exists(requestBody.dateOfArvRegimenChange) ? requestBody.dateOfArvRegimenChange : '2023-09-04'",
+    "valueBooleanBreastfeeding": "$exists(requestBody.breastfeeding) ? requestBody.breastfeeding : false",
+    "valueBooleanObAartRegimenSwitch": "$exists(requestBody.breastfeeding) ? requestBody.breastfeeding : false",
+    
+    
     "fullUrlMedicationReqArvTreatment": "$exists(requestBody.arvTreatmentMedicationRequestID) ? 'MedicationRequest/' & requestBody.arvTreatmentMedicationRequestID : null",
     "resourceIdMedicationReqArvTreatment": "$exists(requestBody.arvTreatmentMedicationRequestID) ? requestBody.arvTreatmentMedicationRequestID : null",
     "subjectReferenceMedicationReqArvTreatment": "$exists(requestBody.patientId) ? 'Patient/' & requestBody.patientId : null",
@@ -154,8 +158,11 @@
     "resourceIdObsHivTestResult": "$exists(requestBody.hivTestResultID) ? requestBody.hivTestResultID : null",
     "subjectReferenceObsHivTestResult": "$exists(requestBody.patientId) ? 'Patient/' & requestBody.patientId : null",
     "encounterReferenceObsHivTestResult": "$exists(requestBody.encounterID) ? 'Encounter/' & requestBody.encounterID : null", 
+    "lastViralLoadTestDate": "$exists(requestBody.lastViralLoadTestDate) ? requestBody.lastViralLoadTestDate : '2023-09-04'", 
     "performerObsHivTestResult": "$exists(requestBody.organizationID) ? 'Organization/' & requestBody.organizationID : null",
+    "lastViralLoadResult": "$exists(requestBody.lastViralLoadResult) ? requestBody.lastViralLoadResult : 1001",
     "notereferenceObsHivTestResult": "$exists(requestBody.organizationID) ? 'Organization/' & requestBody.organizationID : null",
+    "reasonForVlResultChanges": "$exists(requestBody.reasonForVlResultChanges) ? requestBody.reasonForVlResultChanges : 'Tests'",
     "requestUrlObsHivTestResult": "$exists(requestBody.hivTestResultID) ? 'Observation/' & requestBody.hivTestResultID : null",
 
 
@@ -168,7 +175,7 @@
     "fullUrlSpecimenDefspeciConserv":"$exists(requestBody.hivLabResultTaskID) ? 'Task/' & requestBody.hivLabResultTaskID : null",
     "resourceIdSpecimenDefspeciConserv": "$exists(requestBody.hivLabResultTaskID) ? requestBody.hivLabResultTaskID : null",
     "valueIntegerSpecimenDefspeciConserv": "$exists(requestBody.resultStatus) ? requestBody.resultStatus : null",
-    "identifiervalueSpecimenDefspeciConserv": "$exists(requestBody.labsourceid) ? requestBody.labsourceid : null",
+    "identifiervalueSpecimenDefspeciConserv": "$exists(requestBody.upid) ? requestBody.upid : null",
     "basedOnrefoneSpecimenDefspeciConserv": "$exists(requestBody.serviceRequestID) ? 'ServiceRequest/' & requestBody.serviceRequestID : null",
     "basedOnreftwoSpecimenDefspeciConserv": "$exists(requestBody.sampleDispatchedToLabID) ? 'Transport/' & requestBody.sampleDispatchedToLabID : null",
     "basedOnrefthreeSpecimenDefspeciConserv": "$exists(requestBody.resultDispatchedToRequestingFacilityID) ? 'Transport/' & requestBody.resultDispatchedToRequestingFacilityID : null",
@@ -240,7 +247,7 @@
 
     "fullUrlPractitionerresults":"$exists(requestBody.resultsInterpreterID) ? 'Practitioner/' & requestBody.resultsInterpreterID : null",
     "resourceIdPractitionerresults":"$exists(requestBody.resultsInterpreterID) ? requestBody.resultsInterpreterID : null",
-    "valueIntegerPractitionerresults":"$exists(requestBody.clinicianName) ? requestBody.clinicianName : null",
+    "valueIntegerPractitionerresults":"$exists(requestBody.clinicianName) ? requestBody.clinicianName : 10",
     "telecomvaluePractitionerresults":"$exists(requestBody.vlFocalPersonPhoneNumber) ? requestBody.vlFocalPersonPhoneNumber : null",
     "requestUrlPractitionerresults":"$exists(requestBody.resultsInterpreterID) ? 'Practitioner/' & requestBody.resultsInterpreterID : null",
 
@@ -367,9 +374,9 @@
     "requestBody.patientId":"entry[0].resource.id",
     "constants.profile":"entry[0].resource.meta.profile[0]",
     "constants.monthsUrl":"entry[0].resource.extension[0].url",
-    "requestBody.ageInMonths":"entry[0].resource.extension[0].valueInteger",
+    "transforms.ageInMonths":"entry[0].resource.extension[0].valueInteger",
     "constants.yearsUrl":"entry[0].resource.extension[1].url",
-    "requestBody.ageInYears":"entry[0].resource.extension[1].valueInteger",
+    "transforms.ageInYears":"entry[0].resource.extension[1].valueInteger",
     "constants.use":"entry[0].resource.name[0].use",
     "requestBody.patientLastName":"entry[0].resource.name[0].family",
     "requestBody.patientFirstName":"entry[0].resource.name[0].given[0]",
@@ -615,7 +622,7 @@
     "constants.textCodeObsBreastfeeding":"entry[10].resource.code.text",
     "transforms.subjectReferenceObsBreastfeeding":"entry[10].resource.subject.reference",
     "transforms.encounterReferenceObsBreastfeeding":"entry[10].resource.encounter.reference",
-    "requestBody.breastfeeding":"entry[10].resource.valueBoolean",
+    "transforms.valueBooleanBreastfeeding":"entry[10].resource.valueBoolean",
     "transforms.notereferenceObsBreastfeeding":"entry[10].resource.note[0].authorReference.reference",
     "constants.timeObsBreastfeeding":"entry[10].resource.note[0].time",
     "constants.textObsBreastfeeding":"entry[10].resource.note[0].text",
@@ -709,7 +716,7 @@
     "constants.textCodeObAartRegimenSwitch":"entry[14].resource.code.text",
     "transforms.subjectReferenceObAartRegimenSwitch":"entry[14].resource.subject.reference",
     "transforms.encounterReferenceObAartRegimenSwitch":"entry[14].resource.encounter.reference",
-    "requestBody.dateOfArvRegimenChange":"entry[14].resource.effectiveDateTime",
+    "transforms.dateOfArvRegimenChange":"entry[14].resource.effectiveDateTime",
     "transforms.valueBooleanObAartRegimenSwitch":"entry[14].resource.valueBoolean",
     "transforms.notereferenceObAartRegimenSwitch":"entry[14].resource.note[0].authorReference.reference",
     "constants.timeObAartRegimenSwitch":"entry[14].resource.note[0].time",
@@ -786,16 +793,16 @@
     "constants.textCodeObsHivTestResult":"entry[18].resource.code.text",
     "transforms.subjectReferenceObsHivTestResult":"entry[18].resource.subject.reference",
     "transforms.encounterReferenceObsHivTestResult":"entry[18].resource.encounter.reference",
-    "requestBody.lastViralLoadTestDate":"entry[18].resource.effectiveDateTime",
+    "transforms.lastViralLoadTestDate":"entry[18].resource.effectiveDateTime",
     "transforms.performerObsHivTestResult":"entry[18].resource.performer[].reference",
-    "requestBody.lastViralLoadResult":"entry[18].resource.valueInteger",
+    "transforms.lastViralLoadResult":"entry[18].resource.valueInteger",
     "constants.interpretationSystemCodeObsHivTestResult":"entry[18].resource.interpretation[].coding[].system",
     "constants.interpretationCodeCodeObsHivTestResult":"entry[18].resource.interpretation[].coding[].code",
     "constants.interpretationDisplayCodeObsHivTestResult":"entry[18].resource.interpretation[].coding[].display",
     "constants.interpretationTextCodeObsHivTestResult":"entry[18].resource.interpretation[].text",
     "transforms.notereferenceObsHivTestResult":"entry[18].resource.note[0].authorReference.reference",
     "constants.timeObsHivTestResult":"entry[18].resource.note[0].time",
-    "requestBody.reasonForVlResultChanges":"entry[18].resource.note[0].text",
+    "transforms.reasonForVlResultChanges":"entry[18].resource.note[0].text",
     "constants.methodObsHivTestResult":"entry[18].request.method",
     "transforms.requestUrlObsHivTestResult":"entry[18].request.url",
 

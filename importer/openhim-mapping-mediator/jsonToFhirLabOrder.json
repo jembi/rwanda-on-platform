@@ -33,7 +33,7 @@
     "requestUrlPerfORG": "$exists(requestBody.performingOrganizationID) ? 'Organization/' & requestBody.performingOrganizationID : null",
 
     "fullUrlServiceReq": "$exists(requestBody.serviceRequestID) ? 'ServiceRequest/' & requestBody.serviceRequestID : null",
-    "valueServiceReq": "$exists(requestBody.labsourceid) ? requestBody.labsourceid : null",
+    "valueServiceReq": "$exists(requestBody.labId) ? requestBody.labId : null",
     "resourceIdServiceReq": "$exists(requestBody.serviceRequestID) ? requestBody.serviceRequestID : null",
     "subjectReferenceServiceReq": "$exists(requestBody.patientId) ? 'Patient/' & requestBody.patientId : null",
     "encounterReferenceServiceReq": "$exists(requestBody.encounterID) ? 'Encounter/' & requestBody.encounterID : null", 
@@ -163,7 +163,7 @@
     "fullUrlSpecimenDefspeciConserv":"$exists(requestBody.hivLabResultTaskID) ? 'Task/' & requestBody.hivLabResultTaskID : null",
     "resourceIdSpecimenDefspeciConserv": "$exists(requestBody.hivLabResultTaskID) ? requestBody.hivLabResultTaskID : null",
     "valueIntegerSpecimenDefspeciConserv": "$exists(requestBody.resultStatus) ? requestBody.resultStatus : null",
-    "identifiervalueSpecimenDefspeciConserv": "$exists(requestBody.labsourceid) ? requestBody.labsourceid : null",
+    "identifiervalueSpecimenDefspeciConserv": "$exists(requestBody.labId) ? requestBody.labId : null",
     "basedOnrefoneSpecimenDefspeciConserv": "$exists(requestBody.serviceRequestID) ? 'ServiceRequest/' & requestBody.serviceRequestID : null",
     "basedOnreftwoSpecimenDefspeciConserv": "$exists(requestBody.sampleDispatchedToLabID) ? 'Transport/' & requestBody.sampleDispatchedToLabID : null",
     "basedOnrefthreeSpecimenDefspeciConserv": "$exists(requestBody.resultDispatchedToRequestingFacilityID) ? 'Transport/' & requestBody.resultDispatchedToRequestingFacilityID : null",
