@@ -359,7 +359,7 @@
         "headers": {
           "contentType": "application/json"
         },
-        "url": "http://openhim-core:5001/raw-fhir"
+        "url": "http://openhim-core:5001/hapi-fhir-jpaserver/fhir/"
         // "url": "http://192.168.23.81:8086/lab-orders"
       },
       "extract": {

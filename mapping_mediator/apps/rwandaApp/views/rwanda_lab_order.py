@@ -19,7 +19,8 @@ OPENHIM_HOST = env('OPENHIM_HOST')
 ORGANIZATION_ID=env('ORGANIZATION_ID')
 REQUESTING_ORGANIZATION_ID=env('REQUESTING_ORGANIZATION_ID')
 PERFORMING_ORGANIZATION_ID=env('PERFORMING_ORGANIZATION_ID')
-
+FHIR_PORT=env('FHIR_PORT')
+FHIR_URL=env('FHIR_URL')
 class LabUUIDView(APIView):
 
     def post(self, request):
@@ -142,7 +143,7 @@ class LabResult(APIView):
             # url = "http://" + OPENHIM_HOST + ":3447/fhir/ServiceRequest?identifier=" + identifier + "&subject=" + subject + "&occurrence=" + occurrence
             # url = "http://" + OPENHIM_HOST + ":8085/hapi-fhir-jpaserver/fhir/ServiceRequest?identifier="+ identifier +"&subject="+ subject+"&occurrence="+occurrence
 
-            url = "http://" + OPENHIM_HOST + ":8085/hapi-fhir-jpaserver/fhir/ServiceRequest?subject="+ subject+"&occurrence="+occurrence
+            url = "http://" + OPENHIM_HOST + ":" + FHIR_PORT + "/" + FHIR_URL + "/ServiceRequest?subject="+ subject +"&occurrence=" + occurrence
             payload = {}
             headers = {}
             print(url)
