@@ -1,12 +1,9 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
+from django.http import JsonResponse
 import uuid
-import json
-import requests
 import environ
-from django.http import HttpResponse, JsonResponse
-from apps.rwandaApp.views.common import getUrl
+from datetime import datetime
 import requests
 import json
 env = environ.Env(
@@ -21,6 +18,7 @@ REQUESTING_ORGANIZATION_ID=env('REQUESTING_ORGANIZATION_ID')
 PERFORMING_ORGANIZATION_ID=env('PERFORMING_ORGANIZATION_ID')
 FHIR_PORT=env('FHIR_PORT')
 FHIR_URL=env('FHIR_URL')
+
 class LabUUIDView(APIView):
 
     def post(self, request):
@@ -64,6 +62,7 @@ class LabUUIDView(APIView):
             json_data["implementingPartnerOrganizationID"] = str(uuid.uuid4())
 
             # call mapping meditor here
+            print("................................................................")
             url = "http://"+OPENHIM_HOST+":"+OPENHIM_PORT+"/lab-order"
             print(url)
             payload = json.dumps(json_data)
@@ -128,6 +127,14 @@ class LabResult(APIView):
             lab_result_data = request.data
             identifier = "221214-9257-6982"
             subject = lab_result_data.get("patientId")
+            effectiveDateTime = lab_result_data.get("resultDispatchedOn")
+            date_obj = datetime.strptime(effectiveDateTime, "%d-%b-%Y %H:%M:%S")
+            formatted_date_str = date_obj.strftime("%Y-%m-%d")
+            lab_result_data["resultDispatchedOn"] = formatted_date_str
+            print("mmmmmmmmmmmmmmmmmmmmmmmmmmm")
+            print(effectiveDateTime)
+            print(formatted_date_str)
+            print(lab_result_data.get("resultDispatchedOn"))
             occurrence = "2012-01-05"
             # url = "http://" + OPENHIM_HOST + ":3447/fhir/ServiceRequest?identifier=" + identifier + "&subject=" + subject + "&occurrence=" + occurrence
             # url = "http://" + OPENHIM_HOST + ":8085/hapi-fhir-jpaserver/fhir/ServiceRequest?identifier="+ identifier +"&subject="+ subject+"&occurrence="+occurrence
@@ -163,7 +170,6 @@ class LabResult(APIView):
                     lab_result_data["hivTestResultAbsoluteDecimalID"] = str(uuid.uuid4())
                     lab_result_data["hivTestResultID"] = str(uuid.uuid4())
 
-                print("11111111111111111111111111")
                 url = "http://" + OPENHIM_HOST + ":3003/lab-results"
                 payload = json.dumps(lab_result_data)
                 headers = {
@@ -174,6 +180,72 @@ class LabResult(APIView):
 
                 print(response.text)
                 return Response(json.loads(response.text))
+
+        except Exception as e:
+            print(e)
+            return Response({"Error":"An internal server error occurred", "Exceptation":str(e)}, status=500)
+
+
+class GetLabResults(APIView):
+
+    def get(self, request):
+        try:
+            print("Get lab Results")
+            subject = request.GET.get('subject')
+            from_date = "ge"+request.GET.get('from_date')
+            to_date = "le"+request.GET.get('to_date')
+            # url = "http://" + OPENHIM_HOST + ":" + FHIR_PORT + "/" + FHIR_URL + "/ServiceRequest?subject="+ subject +"&occurrence=" + occurrence
+            url = "http://" + OPENHIM_HOST + ":" + FHIR_PORT + "/" + FHIR_URL + "/DiagnosticReport?subject="+ subject +"&date="+ from_date +"&date="+ to_date +"&_include=*"
+            # url = "http://localhost:8085/hapi-fhir-jpaserver/fhir/DiagnosticReport?subject="+ subject +"&date="+ from_date +"&date="+ to_date +"&_include=*"
+            print(url)
+            response = requests.request("GET", url, headers={}, data={})
+
+            # print(response.text)
+            if response.status_code == 200:
+                now = datetime.now()
+                lab_result_data = json.loads(response.text)
+                lab_result_data_dict = {}
+                lab_result_data_dict["now"] = now.strftime("%Y-%m-%d :: %H:%M:%S")
+                lab_result_data_dict["status"] = response.status_code
+                lab_result_data_dict["message"] = "Success"
+                data = []
+                if lab_result_data.get("total") > 0:
+                    for lab_result in lab_result_data.get("entry"):
+                        print("-=========================================================================")
+                        # print(lab_result)
+                        result = {}
+                        lab_result_data_resource = lab_result.get("resource")
+                        if lab_result.get("resource").get("resourceType") == "DiagnosticReport":
+                            print("DiagnosticReport")
+                            result["status"] = lab_result_data_resource.get("status")
+                            result["conclusion"] = lab_result_data_resource.get("conclusion")
+                            result["effectiveDateTime"] = lab_result_data_resource.get("effectiveDateTime")
+                            obs = lab_result_data_resource.get("result")[0].get("reference").split('/')[-1]
+                            for lab_result_dg in lab_result_data.get("entry"):
+                                lab_result_data_dg = lab_result_dg.get("resource")
+                                if lab_result_data_dg.get("resourceType") == "Patient":
+                                    print("Patient")
+                                    patientId = lab_result_data_dg.get("id")
+                                    result["patientId"] = patientId
+                                    result["name"] = lab_result_data_dg.get("name")[0].get("given")[0]
+                                    result["phone"] = lab_result_data_dg.get("telecom")[0].get("value")
+                                    result["birthDate"] = lab_result_data_dg.get("birthDate")
+                                    result["upid"] = patientId
+
+                                if lab_result_data_dg.get("resourceType") == "Observation" and obs == lab_result_data_dg.get("id"):
+                                    print("Observation")
+                                    vlResult = lab_result_data_dg.get("valueInteger")
+                                    result["vlResult"] = vlResult
+                                    result["result"] = vlResult
+                        if result:
+                            data.append(result)
+
+                    print(data)
+                    lab_result_data_dict["data"] = data
+                    return JsonResponse(lab_result_data_dict)
+                    # return Response(json.loads(response.text))
+                else:
+                    return Response("No record found")
 
         except Exception as e:
             print(e)
