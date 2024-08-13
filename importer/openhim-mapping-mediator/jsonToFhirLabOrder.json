@@ -150,6 +150,7 @@
     "subjectReferenceObsHivTestResult": "$exists(requestBody.patientId) ? 'Patient/' & requestBody.patientId : null",
     "encounterReferenceObsHivTestResult": "$exists(requestBody.encounterID) ? 'Encounter/' & requestBody.encounterID : null", 
     "performerObsHivTestResult": "$exists(requestBody.organizationID) ? 'Organization/' & requestBody.organizationID : null",
+    "lastViralLoadResult": "$exists(requestBody.vlResult) ? requestBody.vlResult : 1001",
     "notereferenceObsHivTestResult": "$exists(requestBody.organizationID) ? 'Organization/' & requestBody.organizationID : null",
     "requestUrlObsHivTestResult": "$exists(requestBody.hivTestResultID) ? 'Observation/' & requestBody.hivTestResultID : null",
 
@@ -757,7 +758,7 @@
     "transforms.encounterReferenceObsHivTestResult":"entry[18].resource.encounter.reference",
     "requestBody.lastViralLoadTestDate":"entry[18].resource.effectiveDateTime",
     "transforms.performerObsHivTestResult":"entry[18].resource.performer[].reference",
-    "requestBody.lastViralLoadResult":"entry[18].resource.valueInteger",
+    "transforms.lastViralLoadResult":"entry[18].resource.valueInteger",
     "constants.interpretationSystemCodeObsHivTestResult":"entry[18].resource.interpretation[].coding[].system",
     "constants.interpretationCodeCodeObsHivTestResult":"entry[18].resource.interpretation[].coding[].code",
     "constants.interpretationDisplayCodeObsHivTestResult":"entry[18].resource.interpretation[].coding[].display",

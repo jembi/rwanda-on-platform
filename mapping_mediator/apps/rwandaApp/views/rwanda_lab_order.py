@@ -136,11 +136,13 @@ class LabResult(APIView):
         try:
             print(request.data)
             lab_result_data = request.data
-            identifier = "221214-9257-1146"
+            identifier = "221214-9257-6982"
             subject = lab_result_data.get("patientId")
             occurrence = "2012-01-05"
-            url = "http://" + OPENHIM_HOST + ":3447/fhir/ServiceRequest?identifier=" + identifier + "&subject=" + subject + "&occurrence=" + occurrence
+            # url = "http://" + OPENHIM_HOST + ":3447/fhir/ServiceRequest?identifier=" + identifier + "&subject=" + subject + "&occurrence=" + occurrence
             # url = "http://" + OPENHIM_HOST + ":8085/hapi-fhir-jpaserver/fhir/ServiceRequest?identifier="+ identifier +"&subject="+ subject+"&occurrence="+occurrence
+
+            url = "http://" + OPENHIM_HOST + ":8085/hapi-fhir-jpaserver/fhir/ServiceRequest?subject="+ subject+"&occurrence="+occurrence
             payload = {}
             headers = {}
             print(url)
