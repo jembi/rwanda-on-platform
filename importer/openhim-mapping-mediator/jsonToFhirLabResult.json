@@ -10,6 +10,8 @@
   },
   "inputTransforms": {
     
+    "uniqueId":"$exists(requestBody.uniqueId) ? requestBody.uniqueId : null",
+
     "fullUrlTask":"$exists(requestBody.hivLabResultTaskID) ? 'Task/' & requestBody.hivLabResultTaskID : null",
     "resourceIdTask": "$exists(requestBody.hivLabResultTaskID) ? requestBody.hivLabResultTaskID : null",
     "valueIntegerTask": "$exists(requestBody.resultStatus) ? requestBody.resultStatus : null",
@@ -26,7 +28,7 @@
     "forTask":"$exists(requestBody.patientID) ? 'Patient/' & requestBody.patientID : null",
     "encounterTask":"$exists(requestBody.encounterID) ? 'Encounter/' & requestBody.encounterID : null",
     "basedOnTask": "$exists(requestBody.serviceRequestID) ? 'ServiceRequest/' & requestBody.serviceRequestID : null",
-    "resultStatusTask": "$exists(requestBody.resultStatusName) ? requestBody.resultStatusName : null",
+    "resultStatusTask": "$exists(requestBody.resultStatusName) ? requestBody.resultStatusName : 'completed'",
     "lastModifiedTask": "$exists(requestBody.lastModifiedDatetime) ? requestBody.lastModifiedDatetime : null",
 
     
@@ -96,7 +98,7 @@
   },
   "inputMapping": {
     "constants.resourceType":"resourceType",
-    "constants.id": "id",
+    "transforms.uniqueId": "id",
     "constants.type":"type",
 
     "transforms.fullUrlTask":"entry[0].fullUrl",
@@ -136,6 +138,8 @@
     "constants.resourceTypeDiagnosticReport": "entry[1].resource.resourceType",
     "transforms.idDiagnosticReport":"entry[1].resource.id",
     "constants.profileDiagnosticReport": "entry[1].resource.meta.profile[0]",
+    "constants.diagnosticReportTextStatus":"entry[1].resource.text.status",
+    "constants.diagnosticReportTextDiv":"entry[1].resource.text.div",
     "constants.urlDiagnosticReport": "entry[1].resource.extension[0].url",
     "transforms.valueIntegerDiagnosticReport":"entry[1].resource.extension[0].valueInteger",
     "transforms.referenceDiagnosticReport": "entry[1].resource.basedOn[0].reference",
@@ -290,6 +294,8 @@
     "timeDiagnosticReport": "2015-02-07T13:28:17-05:00",
     "notetextDiagnosticReport": "additional notes here",
     "methodDiagnosticReport": "PUT",
+    "diagnosticReportTextStatus": "extensions",
+    "diagnosticReportTextDiv": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative: Specimen</b><a name=\"VLSpecimenExample\"> </a></p><div style=\"display: inline-block; background-color: #d9e0e7; padding: 6px; margin: 4px; border: 1px solid #8da1b4; border-radius: 5px; line-height: 60%\"><p style=\"margin-bottom: 0px\">Resource Specimen &quot;VLSpecimenExample&quot; </p><p style=\"margin-bottom: 0px\">Profile: <a href=\"StructureDefinition-viral-load-specimen.html\">Viral Load Specimen</a></p></div><p><b>Sample reordered</b>: false</p><p><b>identifier</b>: App sample identifier:\u00a0abc123, Remote sample identifier:\u00a0def456, Sample identifier:\u00a0ghi789</p><p><b>type</b>: Specimen Type <span style=\"background: LightGoldenRodYellow; margin: 4px; border: 1px solid khaki\"> (<a href=\"https://browser.ihtsdotools.org/\">SNOMED CT</a>#119361006 &quot;Plasma specimen (specimen)&quot;)</span></p><p><b>subject</b>: <a href=\"Patient-HIVPatientExample.html\">Patient/HIVPatientExample</a> &quot; SMITH&quot;</p><p><b>receivedTime</b>: 2022-07-28</p><h3>Collections</h3><table class=\"grid\"><tr><td>-</td><td><b>Collected[x]</b></td></tr><tr><td>*</td><td>2022-07-28</td></tr></table><h3>Processings</h3><table class=\"grid\"><tr><td>-</td><td><b>Time[x]</b></td></tr><tr><td>*</td><td>2022-07-28</td></tr></table><p><b>note</b>: additional notes here (By Organization/HIVOrganizationExample @7 Feb 2015, 20:28:17)</p></div>",
 
 
     "resourceTypeObsHivTestResult": "Observation",
@@ -353,8 +359,8 @@
         "headers": {
           "contentType": "application/json"
         },
-        "url": "http://192.168.23.81:8086/lab-orders"
-
+        "url": "http://openhim-core:5001/raw-fhir"
+        // "url": "http://192.168.23.81:8086/lab-orders"
       },
       "extract": {
         "JeMPIResponse": "$.body"
