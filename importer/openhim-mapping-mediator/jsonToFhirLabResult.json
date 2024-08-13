@@ -1,7 +1,7 @@
 {
   "name": "VLSM Lab Results",
   "endpoint": {
-    "pattern": "/lab-orders",
+    "pattern": "/lab-results",
     "method": "POST"
   },
   "transformation": {
@@ -360,7 +360,6 @@
           "contentType": "application/json"
         },
         "url": "http://openhim-core:5001/hapi-fhir-jpaserver/fhir/"
-        // "url": "http://192.168.23.81:8086/lab-orders"
       },
       "extract": {
         "JeMPIResponse": "$.body"

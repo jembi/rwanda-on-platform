@@ -95,17 +95,6 @@ class LabView(APIView):
             return Response({"Error":"An internal server error occurred", "Exceptation":str(e)}, status=500)
 
 
-class LabView(APIView):
-
-    def post(self, request):
-        try:
-            print(request.data)
-            return Response(request.data)# "uniqueId": "1h288",
-
-        except Exception as e:
-            print(e)
-            return Response({"Error":"An internal server error occurred", "Exceptation":str(e)}, status=500)
-
 class LabOrderSourceIdView(APIView):
 
     def post(self, request):
@@ -133,7 +122,7 @@ class LabOrderSourceIdView(APIView):
 
 class LabResult(APIView):
 
-    def get(self, request):
+    def post(self, request):
         try:
             print(request.data)
             lab_result_data = request.data
@@ -174,8 +163,8 @@ class LabResult(APIView):
                     lab_result_data["hivTestResultAbsoluteDecimalID"] = str(uuid.uuid4())
                     lab_result_data["hivTestResultID"] = str(uuid.uuid4())
 
-
-                url = "http://" + OPENHIM_HOST + ":" + OPENHIM_PORT + "/lab-orders"
+                print("11111111111111111111111111")
+                url = "http://" + OPENHIM_HOST + ":3003/lab-results"
                 payload = json.dumps(lab_result_data)
                 headers = {
                     'Content-Type': 'application/json'
