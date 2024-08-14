@@ -91,10 +91,10 @@
     "idActivityDefinition": "$exists(requestBody.labOrderTaskActivityID) ? requestBody.labOrderTaskActivityID : null",
     "exValueIntegerActivityDefinition": "$exists(requestBody.revisedBy) ? requestBody.revisedBy : null",
     "dateActivityDefinition": "$exists(requestBody.revisedOn) ? requestBody.revisedOn : null",
-    "lastReviewDateActivityDefinition": "$exists(requestBody.reviewedOn) ? requestBody.reviewedOn : null",
-    "editorNameActivityDefinition": "$exists(requestBody.revisedBy) ? requestBody.revisedBy : null",
-    "reviewerValueIntegerActivityDefinition":"$exists(requestBody.reviewedBy) ? requestBody.reviewedBy : null",
-    "endorserValueIntegerActivityDefinition":"$exists(requestBody.approvedBy) ? requestBody.approvedBy : null",
+    "lastReviewDateActivityDefinition": "$exists(requestBody.reviewedOns) ? requestBody.reviewedOns : null",
+    "editorNameActivityDefinition": "$exists(requestBody.revisedBys) ? requestBody.revisedBys : null",
+    "reviewerValueIntegerActivityDefinition":"$exists(requestBody.reviewedBys) ? requestBody.reviewedBys : null",
+    "endorserValueIntegerActivityDefinition":"$exists(requestBody.approvedBys) ? requestBody.approvedBys : null",
     "requestUrlActivityDefinition": "$exists(requestBody.labOrderTaskActivityID) ? 'ActivityDefinition/' & requestBody.labOrderTaskActivityID : null"
 
   },

@@ -30,6 +30,7 @@
     
     "fullUrlPerfORG": "$exists(requestBody.performingOrganizationID) ? 'Organization/' & requestBody.performingOrganizationID : null",
     "resourceIdPerfORG": "$exists(requestBody.performingOrganizationID) ? requestBody.performingOrganizationID : null",
+    "provinceId": "$exists(requestBody.provinceIds) ? requestBody.provinceIds : null",
     "requestUrlPerfORG": "$exists(requestBody.performingOrganizationID) ? 'Organization/' & requestBody.performingOrganizationID : null",
 
     "fullUrlServiceReq": "$exists(requestBody.serviceRequestID) ? 'ServiceRequest/' & requestBody.serviceRequestID : null",
@@ -443,7 +444,7 @@
     "transforms.resourceIdPerfORG":"entry[3].resource.id",
     "constants.profilePerfORG":"entry[3].resource.meta.profile[0]",
     "constants.urlPerfOrgProvince":"entry[3].resource.extension[0].url",
-    "requestBody.provinceId":"entry[3].resource.extension[0].valueInteger",
+    "transforms.provinceId":"entry[3].resource.extension[0].valueInteger",
     "constants.urlPerfOrgDistrict":"entry[3].resource.extension[1].url",
     "constants.valueIntegerPerfOrgDistrict":"entry[3].resource.extension[1].valueInteger",
     "constants.codingSystemPerfORG":"entry[3].resource.identifier[0].type.coding[].system",
