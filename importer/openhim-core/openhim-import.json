@@ -53,7 +53,7 @@
           "type": "http",
           "status": "enabled",
           "secured": false,
-          "host": "128.199.22.103",
+          "host": "197.243.18.12",
           "port": 8085,
           "path": "",
           "pathTransform": "",
@@ -80,7 +80,7 @@
       "autoRetryEnabled": false,
       "autoRetryPeriodMinutes": 60,
       "updatedBy": {
-        "id": "66acf4823a1b06de71c7b962",
+        "id": "66bca8368e4b6e6029568565",
         "name": "Super User"
       }
     },
@@ -141,7 +141,7 @@
       "autoRetryEnabled": false,
       "autoRetryPeriodMinutes": 60,
       "updatedBy": {
-        "id": "66acf4823a1b06de71c7b962",
+        "id": "66bca8368e4b6e6029568565",
         "name": "Super User"
       }
     },
@@ -202,7 +202,7 @@
       "autoRetryEnabled": false,
       "autoRetryPeriodMinutes": 60,
       "updatedBy": {
-        "id": "66acf4823a1b06de71c7b962",
+        "id": "66bca8368e4b6e6029568565",
         "name": "Super User"
       }
     },
@@ -264,7 +264,7 @@
       "autoRetryEnabled": false,
       "autoRetryPeriodMinutes": 60,
       "updatedBy": {
-        "id": "66acf4823a1b06de71c7b962",
+        "id": "66bca8368e4b6e6029568565",
         "name": "Super User"
       }
     },
@@ -326,7 +326,7 @@
       "autoRetryEnabled": false,
       "autoRetryPeriodMinutes": 60,
       "updatedBy": {
-        "id": "66acf4823a1b06de71c7b962",
+        "id": "66bca8368e4b6e6029568565",
         "name": "Super User"
       }
     },
@@ -387,9 +387,70 @@
       "autoRetryEnabled": false,
       "autoRetryPeriodMinutes": 60,
       "updatedBy": {
-        "id": "66acf4823a1b06de71c7b962",
+        "id": "66bca8368e4b6e6029568565",
         "name": "Super User"
       }
+    },
+    {
+      "name": "OpenHIM Mapping Mediator",
+      "urlPattern": "^/endpoints.*$",
+      "isAsynchronousProcess": false,
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT",
+        "OPTIONS",
+        "HEAD",
+        "TRACE",
+        "CONNECT",
+        "PATCH"
+      ],
+      "type": "http",
+      "tcpPort": null,
+      "tcpHost": null,
+      "pollingSchedule": null,
+      "requestBody": true,
+      "responseBody": true,
+      "allow": [],
+      "whitelist": [],
+      "authType": "public",
+      "routes": [
+        {
+          "name": "Mapping Mediator",
+          "type": "http",
+          "status": "enabled",
+          "secured": false,
+          "host": "openhim-mapping-mediator",
+          "port": 3003,
+          "path": "",
+          "pathTransform": "",
+          "primary": true,
+          "username": "",
+          "password": "",
+          "forwardAuthHeader": false
+        }
+      ],
+      "matchContentTypes": [],
+      "matchContentRegex": null,
+      "matchContentXpath": null,
+      "matchContentJson": null,
+      "matchContentValue": null,
+      "properties": [],
+      "txViewAcl": [],
+      "txViewFullAcl": [],
+      "txRerunAcl": [],
+      "status": "enabled",
+      "rewriteUrls": false,
+      "addAutoRewriteRules": true,
+      "rewriteUrlsConfig": [],
+      "autoRetryEnabled": false,
+      "autoRetryPeriodMinutes": 60,
+      "updatedBy": {
+        "id": "66bca8368e4b6e6029568565",
+        "name": "Super User"
+      },
+      "alerts": []
     }
   ],
   "Mediators": [
@@ -410,8 +471,8 @@
       ],
       "defaultChannelConfig": [],
       "configDefs": [],
-      "_lastHeartbeat": "2024-08-14T12:40:26.792Z",
-      "_uptime": 2641.511778861
+      "_lastHeartbeat": "2024-08-14T13:18:59.080Z",
+      "_uptime": 1651.129535758
     }
   ],
   "ContactGroups": []
