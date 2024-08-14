@@ -131,7 +131,7 @@ class LabResult(APIView):
             date_obj = datetime.strptime(effectiveDateTime, "%d-%b-%Y %H:%M:%S")
             formatted_date_str = date_obj.strftime("%Y-%m-%d")
             lab_result_data["resultDispatchedOn"] = formatted_date_str
-            print("mmmmmmmmmmmmmmmmmmmmmmmmmmm")
+
             print(effectiveDateTime)
             print(formatted_date_str)
             print(lab_result_data.get("resultDispatchedOn"))
@@ -139,13 +139,15 @@ class LabResult(APIView):
             # url = "http://" + OPENHIM_HOST + ":3447/fhir/ServiceRequest?identifier=" + identifier + "&subject=" + subject + "&occurrence=" + occurrence
             # url = "http://" + OPENHIM_HOST + ":8085/hapi-fhir-jpaserver/fhir/ServiceRequest?identifier="+ identifier +"&subject="+ subject+"&occurrence="+occurrence
 
-            url = "http://" + OPENHIM_HOST + ":" + FHIR_PORT + "/" + FHIR_URL + "/ServiceRequest?subject="+ subject +"&occurrence=" + occurrence
+            url = "http://" + OPENHIM_HOST + ":" + OPENHIM_PORT + "/" + FHIR_URL + "/ServiceRequest?subject="+ subject +"&occurrence=" + formatted_date_str
             payload = {}
             headers = {}
             print(url)
             response = requests.request("GET", url, headers=headers, data=payload)
+            print(response)
             if response.status_code == 200:
                 print(response.text)
+                print("mmmmmmmmmmmmmmmmmmmmmmmmmmm")
                 data = json.loads(response.text)
                 patient = data.get("entry")[0]
                 if patient:
@@ -170,7 +172,7 @@ class LabResult(APIView):
                     lab_result_data["hivTestResultAbsoluteDecimalID"] = str(uuid.uuid4())
                     lab_result_data["hivTestResultID"] = str(uuid.uuid4())
 
-                url = "http://" + OPENHIM_HOST + ":3003/lab-results"
+                url = "http://openhim-mapping-mediator:3003/lab-results"
                 payload = json.dumps(lab_result_data)
                 headers = {
                     'Content-Type': 'application/json'
@@ -180,7 +182,8 @@ class LabResult(APIView):
 
                 print(response.text)
                 return Response(json.loads(response.text))
-
+            else:
+                return Response("No record found")
         except Exception as e:
             print(e)
             return Response({"Error":"An internal server error occurred", "Exceptation":str(e)}, status=500)
@@ -195,7 +198,7 @@ class GetLabResults(APIView):
             from_date = "ge"+request.GET.get('from_date')
             to_date = "le"+request.GET.get('to_date')
             # url = "http://" + OPENHIM_HOST + ":" + FHIR_PORT + "/" + FHIR_URL + "/ServiceRequest?subject="+ subject +"&occurrence=" + occurrence
-            url = "http://" + OPENHIM_HOST + ":" + FHIR_PORT + "/" + FHIR_URL + "/DiagnosticReport?subject="+ subject +"&date="+ from_date +"&date="+ to_date +"&_include=*"
+            url = "http://" + OPENHIM_HOST + ":" + OPENHIM_PORT + "/" + FHIR_URL + "/DiagnosticReport?subject="+ subject +"&date="+ from_date +"&date="+ to_date +"&_include=*"
             # url = "http://localhost:8085/hapi-fhir-jpaserver/fhir/DiagnosticReport?subject="+ subject +"&date="+ from_date +"&date="+ to_date +"&_include=*"
             print(url)
             response = requests.request("GET", url, headers={}, data={})
