@@ -53,7 +53,7 @@
           "type": "http",
           "status": "enabled",
           "secured": false,
-          "host": "192.168.23.81",
+          "host": "128.199.22.103",
           "port": 8085,
           "path": "",
           "pathTransform": "",
@@ -80,7 +80,7 @@
       "autoRetryEnabled": false,
       "autoRetryPeriodMinutes": 60,
       "updatedBy": {
-        "id": "66bc5fd4daa5454efed42b77",
+        "id": "66acf4823a1b06de71c7b962",
         "name": "Super User"
       }
     },
@@ -141,13 +141,13 @@
       "autoRetryEnabled": false,
       "autoRetryPeriodMinutes": 60,
       "updatedBy": {
-        "id": "66bc5fd4daa5454efed42b77",
+        "id": "66acf4823a1b06de71c7b962",
         "name": "Super User"
       }
     },
     {
-      "name": "EMR Lab Order",
-      "urlPattern": "^/emr-lab-order$",
+      "name": "Get Lab Results",
+      "urlPattern": "^^/get-lab-results.*$$",
       "isAsynchronousProcess": false,
       "methods": [
         "GET",
@@ -161,7 +161,6 @@
         "PATCH"
       ],
       "type": "http",
-      "priority": 2,
       "tcpPort": null,
       "tcpHost": null,
       "pollingSchedule": null,
@@ -172,13 +171,13 @@
       "authType": "public",
       "routes": [
         {
-          "name": "Generate Lab Source ID",
+          "name": "Get Lab Results",
           "type": "http",
           "status": "enabled",
           "secured": false,
           "host": "rwanda-custom-mapping-mediator",
           "port": 8084,
-          "path": "/lab-orders-source-id",
+          "path": "",
           "pathTransform": "",
           "primary": true,
           "username": "",
@@ -196,14 +195,14 @@
       "txViewFullAcl": [],
       "txRerunAcl": [],
       "alerts": [],
-      "status": "deleted",
+      "status": "enabled",
       "rewriteUrls": false,
       "addAutoRewriteRules": true,
       "rewriteUrlsConfig": [],
       "autoRetryEnabled": false,
       "autoRetryPeriodMinutes": 60,
       "updatedBy": {
-        "id": "66bc5fd4daa5454efed42b77",
+        "id": "66acf4823a1b06de71c7b962",
         "name": "Super User"
       }
     },
@@ -265,7 +264,7 @@
       "autoRetryEnabled": false,
       "autoRetryPeriodMinutes": 60,
       "updatedBy": {
-        "id": "66bc5fd4daa5454efed42b77",
+        "id": "66acf4823a1b06de71c7b962",
         "name": "Super User"
       }
     },
@@ -285,6 +284,7 @@
         "PATCH"
       ],
       "type": "http",
+      "priority": 3,
       "tcpPort": null,
       "tcpHost": null,
       "pollingSchedule": null,
@@ -326,71 +326,9 @@
       "autoRetryEnabled": false,
       "autoRetryPeriodMinutes": 60,
       "updatedBy": {
-        "id": "66bc5fd4daa5454efed42b77",
+        "id": "66acf4823a1b06de71c7b962",
         "name": "Super User"
-      },
-      "priority": 3
-    },
-    {
-      "name": "Get Lab Rsults",
-      "urlPattern": "^/get-lab-results.*$",
-      "isAsynchronousProcess": false,
-      "methods": [
-        "GET",
-        "POST",
-        "DELETE",
-        "PUT",
-        "OPTIONS",
-        "HEAD",
-        "TRACE",
-        "CONNECT",
-        "PATCH"
-      ],
-      "type": "http",
-      "tcpPort": null,
-      "tcpHost": null,
-      "pollingSchedule": null,
-      "requestBody": true,
-      "responseBody": true,
-      "allow": [],
-      "whitelist": [],
-      "authType": "public",
-      "routes": [
-        {
-          "name": "Get Lab Result Custom Mapping",
-          "type": "http",
-          "status": "enabled",
-          "secured": false,
-          "host": "rwanda-custom-mapping-mediator",
-          "port": 8084,
-          "path": "",
-          "pathTransform": "",
-          "primary": true,
-          "username": "",
-          "password": "",
-          "forwardAuthHeader": false
-        }
-      ],
-      "matchContentTypes": [],
-      "matchContentRegex": null,
-      "matchContentXpath": null,
-      "matchContentJson": null,
-      "matchContentValue": null,
-      "properties": [],
-      "txViewAcl": [],
-      "txViewFullAcl": [],
-      "txRerunAcl": [],
-      "status": "enabled",
-      "rewriteUrls": false,
-      "addAutoRewriteRules": true,
-      "rewriteUrlsConfig": [],
-      "autoRetryEnabled": false,
-      "autoRetryPeriodMinutes": 60,
-      "updatedBy": {
-        "id": "66bc5fd4daa5454efed42b77",
-        "name": "Super User"
-      },
-      "alerts": []
+      }
     },
     {
       "name": "Post VLSM Lab Results To FHIR",
@@ -441,68 +379,6 @@
       "txViewAcl": [],
       "txViewFullAcl": [],
       "txRerunAcl": [],
-      "status": "enabled",
-      "rewriteUrls": false,
-      "addAutoRewriteRules": true,
-      "rewriteUrlsConfig": [],
-      "autoRetryEnabled": false,
-      "autoRetryPeriodMinutes": 60,
-      "updatedBy": {
-        "id": "66bc5fd4daa5454efed42b77",
-        "name": "Super User"
-      },
-      "alerts": []
-    },
-    {
-      "name": "VLSM And FHIR Lab Order",
-      "urlPattern": "^/vlsm/order$",
-      "isAsynchronousProcess": false,
-      "methods": [
-        "GET",
-        "POST",
-        "DELETE",
-        "PUT",
-        "OPTIONS",
-        "HEAD",
-        "TRACE",
-        "CONNECT",
-        "PATCH"
-      ],
-      "type": "http",
-      "priority": 2,
-      "tcpPort": null,
-      "tcpHost": null,
-      "pollingSchedule": null,
-      "requestBody": true,
-      "responseBody": true,
-      "allow": [],
-      "whitelist": [],
-      "authType": "public",
-      "routes": [
-        {
-          "name": "Generate UUID for FHIR",
-          "type": "http",
-          "status": "enabled",
-          "secured": false,
-          "host": "rwanda-custom-mapping-mediator",
-          "port": 8084,
-          "path": "/lab-orders-uuid-generator",
-          "pathTransform": "",
-          "primary": true,
-          "username": "",
-          "password": "",
-          "forwardAuthHeader": false
-        }
-      ],
-      "matchContentTypes": [],
-      "matchContentRegex": null,
-      "matchContentXpath": null,
-      "matchContentJson": null,
-      "matchContentValue": null,
-      "properties": [],
-      "txViewAcl": [],
-      "txViewFullAcl": [],
-      "txRerunAcl": [],
       "alerts": [],
       "status": "enabled",
       "rewriteUrls": false,
@@ -511,7 +387,7 @@
       "autoRetryEnabled": false,
       "autoRetryPeriodMinutes": 60,
       "updatedBy": {
-        "id": "66bc5fd4daa5454efed42b77",
+        "id": "66acf4823a1b06de71c7b962",
         "name": "Super User"
       }
     }
@@ -534,8 +410,8 @@
       ],
       "defaultChannelConfig": [],
       "configDefs": [],
-      "_lastHeartbeat": "2024-08-14T09:27:19.295Z",
-      "_uptime": 4190.715670325
+      "_lastHeartbeat": "2024-08-14T12:40:26.792Z",
+      "_uptime": 2641.511778861
     }
   ],
   "ContactGroups": []
