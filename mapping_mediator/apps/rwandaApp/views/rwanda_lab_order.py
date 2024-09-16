@@ -63,7 +63,7 @@ class LabUUIDView(APIView):
 
             # call mapping meditor here
             print("................................................................")
-            url = "http://"+OPENHIM_HOST+":"+OPENHIM_PORT+"/lab-order"
+            url = "http://" + OPENHIM_HOST + ":" + OPENHIM_PORT + "/lab-order"
             print(url)
             payload = json.dumps(json_data)
             headers = {
@@ -125,8 +125,7 @@ class LabResult(APIView):
         try:
             print(request.data)
             lab_result_data = request.data
-            identifier = "221214-9257-6982"
-            subject = lab_result_data.get("patientId")
+            patientArtNo = lab_result_data.get("patientArtNo")
             effectiveDateTime = lab_result_data.get("resultDispatchedOn")
             date_obj = datetime.strptime(effectiveDateTime, "%d-%b-%Y %H:%M:%S")
             formatted_date_str = date_obj.strftime("%Y-%m-%d")
@@ -135,28 +134,30 @@ class LabResult(APIView):
             print(effectiveDateTime)
             print(formatted_date_str)
             print(lab_result_data.get("resultDispatchedOn"))
-            occurrence = "2012-01-05"
-            # url = "http://" + OPENHIM_HOST + ":3447/fhir/ServiceRequest?identifier=" + identifier + "&subject=" + subject + "&occurrence=" + occurrence
-            # url = "http://" + OPENHIM_HOST + ":8085/hapi-fhir-jpaserver/fhir/ServiceRequest?identifier="+ identifier +"&subject="+ subject+"&occurrence="+occurrence
-
-            url = "http://" + OPENHIM_HOST + ":" + OPENHIM_PORT + "/" + FHIR_URL + "/ServiceRequest?subject="+ subject +"&occurrence=" + formatted_date_str
+            url = "http://" + OPENHIM_HOST + ":" + OPENHIM_PORT + "/" + FHIR_URL + "/ServiceRequest?identifier="+ patientArtNo +"&occurrence=" + formatted_date_str
             payload = {}
             headers = {}
             print(url)
             response = requests.request("GET", url, headers=headers, data=payload)
             print(response)
+           
             if response.status_code == 200:
-                print(response.text)
-                print("mmmmmmmmmmmmmmmmmmmmmmmmmmm")
                 data = json.loads(response.text)
-                patient = data.get("entry")[0]
+                print(data)
+                patient = data.get("entry")
+                organizationID = "performingOrganizationID"
+                print(patient)
                 if patient:
-                    patientID = patient.get("resource").get("subject").get("reference")
-                    encounterID = patient.get("resource").get("encounter").get("reference")
-                    organizationID = patient.get("resource").get("note")[0].get("authorReference").get("reference")
-                    performingPractitionerID = patient.get("resource").get("performer")[0].get("reference")
-                    resultsInterpreterID = patient.get("resource").get("subject").get("reference")
-                    serviceRequestID = patient.get("resource").get("id")
+                    patient = data.get("entry")[0]
+                    resource = patient.get("resource")
+                    patientID = resource.get("subject").get("reference")
+                    encounterID = resource.get("encounter").get("reference")
+                    if resource.get("note"):
+                        organizationID = resource.get("note")[0].get("authorReference").get("reference")
+                    performingPractitionerID = resource.get("requester").get("reference")
+                    resultsInterpreterID = resource.get("subject").get("reference")
+                    serviceRequestID = resource.get("id")
+
 
                     lab_result_data["patientID"] = patientID.split('/')[-1]
                     lab_result_data["encounterID"]=encounterID.split('/')[-1]
@@ -172,16 +173,19 @@ class LabResult(APIView):
                     lab_result_data["hivTestResultAbsoluteDecimalID"] = str(uuid.uuid4())
                     lab_result_data["hivTestResultID"] = str(uuid.uuid4())
 
-                url = "http://openhim-mapping-mediator:3003/lab-results"
-                payload = json.dumps(lab_result_data)
-                headers = {
-                    'Content-Type': 'application/json'
-                }
+                    url = "http://openhim-mapping-mediator:3003/lab-results"
 
-                response = requests.request("POST", url, headers=headers, data=payload)
+                    payload = json.dumps(lab_result_data)
+                    headers = {
+                        'Content-Type': 'application/json'
+                    }
 
-                print(response.text)
-                return Response(json.loads(response.text))
+                    response = requests.request("POST", url, headers=headers, data=payload)
+
+                    print(response.text)
+                    return Response(json.loads(response.text))
+                else:
+                    return Response("No record found for date " + formatted_date_str + " and patient Art No " + patientArtNo)
             else:
                 return Response("No record found")
         except Exception as e:
@@ -197,9 +201,7 @@ class GetLabResults(APIView):
             subject = request.GET.get('subject')
             from_date = "ge"+request.GET.get('from_date')
             to_date = "le"+request.GET.get('to_date')
-            # url = "http://" + OPENHIM_HOST + ":" + FHIR_PORT + "/" + FHIR_URL + "/ServiceRequest?subject="+ subject +"&occurrence=" + occurrence
             url = "http://" + OPENHIM_HOST + ":" + OPENHIM_PORT + "/" + FHIR_URL + "/DiagnosticReport?subject="+ subject +"&date="+ from_date +"&date="+ to_date +"&_include=*"
-            # url = "http://localhost:8085/hapi-fhir-jpaserver/fhir/DiagnosticReport?subject="+ subject +"&date="+ from_date +"&date="+ to_date +"&_include=*"
             print(url)
             response = requests.request("GET", url, headers={}, data={})
 
@@ -214,8 +216,6 @@ class GetLabResults(APIView):
                 data = []
                 if lab_result_data.get("total") > 0:
                     for lab_result in lab_result_data.get("entry"):
-                        print("-=========================================================================")
-                        # print(lab_result)
                         result = {}
                         lab_result_data_resource = lab_result.get("resource")
                         if lab_result.get("resource").get("resourceType") == "DiagnosticReport":
@@ -230,8 +230,8 @@ class GetLabResults(APIView):
                                     print("Patient")
                                     patientId = lab_result_data_dg.get("id")
                                     result["patientId"] = patientId
-                                    result["name"] = lab_result_data_dg.get("name")[0].get("given")[0]
-                                    result["phone"] = lab_result_data_dg.get("telecom")[0].get("value")
+                                    result["name"] = (lab_result_data_dg.get("name", [{}])[0].get("given", [None])[0])
+                                    result["phone"] = (lab_result_data_dg.get("telecom", [{}])[0].get("value"))
                                     result["birthDate"] = lab_result_data_dg.get("birthDate")
                                     result["upid"] = patientId
 
