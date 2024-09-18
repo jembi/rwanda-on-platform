@@ -126,15 +126,21 @@ class LabResult(APIView):
             print(request.data)
             lab_result_data = request.data
             patientArtNo = lab_result_data.get("patientArtNo")
-            effectiveDateTime = lab_result_data.get("resultDispatchedOn")
-            date_obj = datetime.strptime(effectiveDateTime, "%d-%b-%Y %H:%M:%S")
+            labOrderId = lab_result_data.get("labOrderId")
+            sampleCollectionDate = lab_result_data.get("sampleCollectionDate")
+            if not sampleCollectionDate:
+                return Response("sampleCollectionDate is not present in results")
+            date_obj = datetime.strptime(sampleCollectionDate, "%d-%b-%Y %H:%M:%S")
             formatted_date_str = date_obj.strftime("%Y-%m-%d")
             lab_result_data["resultDispatchedOn"] = formatted_date_str
 
-            print(effectiveDateTime)
+            print(sampleCollectionDate)
             print(formatted_date_str)
             print(lab_result_data.get("resultDispatchedOn"))
-            url = "http://" + OPENHIM_HOST + ":" + OPENHIM_PORT + "/" + FHIR_URL + "/ServiceRequest?identifier="+ patientArtNo +"&occurrence=" + formatted_date_str
+            if labOrderId:
+                url = "http://" + OPENHIM_HOST + ":" + OPENHIM_PORT + "/" + FHIR_URL + "/ServiceRequest?identifier="+ labOrderId
+            else:
+                url = "http://" + OPENHIM_HOST + ":" + OPENHIM_PORT + "/" + FHIR_URL + "/ServiceRequest?identifier="+ patientArtNo +"&occurrence=" + formatted_date_str
             payload = {}
             headers = {}
             print(url)
@@ -145,7 +151,7 @@ class LabResult(APIView):
                 data = json.loads(response.text)
                 print(data)
                 patient = data.get("entry")
-                organizationID = "performingOrganizationID"
+                organizationID = PERFORMING_ORGANIZATION_ID
                 print(patient)
                 if patient:
                     patient = data.get("entry")[0]
@@ -154,10 +160,10 @@ class LabResult(APIView):
                     encounterID = resource.get("encounter").get("reference")
                     if resource.get("note"):
                         organizationID = resource.get("note")[0].get("authorReference").get("reference")
-                    performingPractitionerID = resource.get("requester").get("reference")
+                    if resource.get("requester"):
+                        performingPractitionerID = resource.get("requester").get("reference")
                     resultsInterpreterID = resource.get("subject").get("reference")
                     serviceRequestID = resource.get("id")
-
 
                     lab_result_data["patientID"] = patientID.split('/')[-1]
                     lab_result_data["encounterID"]=encounterID.split('/')[-1]
