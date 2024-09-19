@@ -1,7 +1,7 @@
 {
   "name": "VLSM Lab Results",
   "endpoint": {
-    "pattern": "/lab-orders",
+    "pattern": "/lab-results",
     "method": "POST"
   },
   "transformation": {
@@ -10,6 +10,8 @@
   },
   "inputTransforms": {
     
+    "uniqueId":"$exists(requestBody.uniqueId) ? requestBody.uniqueId : null",
+
     "fullUrlTask":"$exists(requestBody.hivLabResultTaskID) ? 'Task/' & requestBody.hivLabResultTaskID : null",
     "resourceIdTask": "$exists(requestBody.hivLabResultTaskID) ? requestBody.hivLabResultTaskID : null",
     "valueIntegerTask": "$exists(requestBody.resultStatus) ? requestBody.resultStatus : null",
@@ -26,7 +28,7 @@
     "forTask":"$exists(requestBody.patientID) ? 'Patient/' & requestBody.patientID : null",
     "encounterTask":"$exists(requestBody.encounterID) ? 'Encounter/' & requestBody.encounterID : null",
     "basedOnTask": "$exists(requestBody.serviceRequestID) ? 'ServiceRequest/' & requestBody.serviceRequestID : null",
-    "resultStatusTask": "$exists(requestBody.resultStatusName) ? requestBody.resultStatusName : null",
+    "resultStatusTask": "$exists(requestBody.resultStatusName) ? requestBody.resultStatusName : 'completed'",
     "lastModifiedTask": "$exists(requestBody.lastModifiedDatetime) ? requestBody.lastModifiedDatetime : null",
 
     
@@ -35,6 +37,8 @@
     "valueIntegerDiagnosticReport": "$exists(requestBody.testedBy) ? requestBody.testedBy : null",
     "referenceDiagnosticReport": "$exists(requestBody.serviceRequestID) ? 'ServiceRequest/' & requestBody.serviceRequestID : null",
     "subReferenceDiagnosticReport": "$exists(requestBody.patientID) ? 'Patient/' & requestBody.patientID : null",
+    
+    "effectiveDateTimeDiagnosticReport": "$exists(requestBody.resultDispatchedOn) ? requestBody.resultDispatchedOn : null",
     "encReferenceDiagnosticReport": "$exists(requestBody.encounterID) ? 'Encounter/' & requestBody.encounterID : null",
     "perReferenceDiagnosticReport": "$exists(requestBody.performingPractitionerID) ? 'Practitioner/' & requestBody.performingPractitionerID : null",
     "resultsIntReferenceDiagnosticReport": "$exists(requestBody.resultsInterpreterID) ? 'Practitioner/' & requestBody.resultsInterpreterID : null",
@@ -51,9 +55,9 @@
     "encounterreferenceObsHivTestResult": "$exists(requestBody.encounterID) ? 'Encounter/' & requestBody.encounterID : null",
     "effectiveDateTimeObsHivTestResult": "$exists(requestBody.lastViralLoadTestDate) ? requestBody.lastViralLoadTestDate : null",
     "performerreferenceObsHivTestResult": "$exists(requestBody.organizationID) ? 'Organization/' & requestBody.organizationID : null",
-    "valueIntegerObsHivTestResult": "$exists(requestBody.lastViralLoadResult) ? requestBody.lastViralLoadResult : null",
-    "intCodeObsHivTestResult": "$exists(requestBody.vlResultCategory) ? requestBody.vlResultCategory : 'vlResultCategory.code'",
-    "intDisplayObsHivTestResult": "$exists(requestBody.vlResultCategory) ? requestBody.vlResultCategory : 'vlResultCategory.display'",
+    "valueIntegerObsHivTestResult": "$exists(requestBody.vlResult) ? requestBody.vlResult : null",
+    "intCodeObsHivTestResult": "$exists(requestBody.vlResultCategory) ? requestBody.vlResultCategory : '19032002'",
+    "intDisplayObsHivTestResult": "$exists(requestBody.vlResultCategory) ? requestBody.vlResultCategory : 'Uncontrolled'",
     "authorReferenceObsHivTestResult": "$exists(requestBody.organizationID) ? 'Organization/' & requestBody.organizationID : null",
     "notetextObsHivTestResult": "$exists(requestBody.reasonForVlResultChanges) ? requestBody.reasonForVlResultChanges : null",
     "requestUrlObsHivTestResult": "$exists(requestBody.hivTestResultID) ? 'Observation/' & requestBody.hivTestResultID : null",
@@ -87,15 +91,18 @@
     "idActivityDefinition": "$exists(requestBody.labOrderTaskActivityID) ? requestBody.labOrderTaskActivityID : null",
     "exValueIntegerActivityDefinition": "$exists(requestBody.revisedBy) ? requestBody.revisedBy : null",
     "dateActivityDefinition": "$exists(requestBody.revisedOn) ? requestBody.revisedOn : null",
-    "lastReviewDateActivityDefinition": "$exists(requestBody.reviewedOn) ? requestBody.reviewedOn : null",
-    "editorNameActivityDefinition": "$exists(requestBody.revisedByName) ? requestBody.revisedByName : null",
-    "reviewerValueIntegerActivityDefinition":"$exists(requestBody.reviewedBy) ? requestBody.reviewedBy : null",
-    "endorserValueIntegerActivityDefinition":"$exists(requestBody.approvedBy) ? requestBody.approvedBy : null",
+    "lastReviewDateActivityDefinition": "$exists(requestBody.reviewedOns) ? requestBody.reviewedOns : null",
+    "editorNameActivityDefinition": "$exists(requestBody.revisedBys) ? requestBody.revisedBys : null",
+    "reviewerValueIntegerActivityDefinition":"$exists(requestBody.reviewedBys) ? requestBody.reviewedBys : null",
+    "endorserValueIntegerActivityDefinition":"$exists(requestBody.approvedBys) ? requestBody.approvedBys : null",
     "requestUrlActivityDefinition": "$exists(requestBody.labOrderTaskActivityID) ? 'ActivityDefinition/' & requestBody.labOrderTaskActivityID : null"
 
   },
   "inputMapping": {
-    
+    "constants.resourceType":"resourceType",
+    "transforms.uniqueId": "id",
+    "constants.type":"type",
+
     "transforms.fullUrlTask":"entry[0].fullUrl",
     "constants.resourceTypeTask":"entry[0].resource.resourceType",
     "transforms.resourceIdTask":"entry[0].resource.id",
@@ -133,6 +140,8 @@
     "constants.resourceTypeDiagnosticReport": "entry[1].resource.resourceType",
     "transforms.idDiagnosticReport":"entry[1].resource.id",
     "constants.profileDiagnosticReport": "entry[1].resource.meta.profile[0]",
+    "constants.diagnosticReportTextStatus":"entry[1].resource.text.status",
+    "constants.diagnosticReportTextDiv":"entry[1].resource.text.div",
     "constants.urlDiagnosticReport": "entry[1].resource.extension[0].url",
     "transforms.valueIntegerDiagnosticReport":"entry[1].resource.extension[0].valueInteger",
     "transforms.referenceDiagnosticReport": "entry[1].resource.basedOn[0].reference",
@@ -142,7 +151,7 @@
     "constants.displayDiagnosticReport": "entry[1].resource.code.coding[0].display",
     "constants.textDiagnosticReport": "entry[1].resource.code.text",
     "transforms.subReferenceDiagnosticReport": "entry[1].resource.subject.reference",
-    "constants.effectiveDateTimeDiagnosticReport": "entry[1].resource.effectiveDateTime",
+    "transforms.effectiveDateTimeDiagnosticReport": "entry[1].resource.effectiveDateTime",
     "transforms.encReferenceDiagnosticReport": "entry[1].resource.encounter.reference",
     "transforms.perReferenceDiagnosticReport": "entry[1].resource.performer[0].reference",
     "transforms.resultsIntReferenceDiagnosticReport": "entry[1].resource.resultsInterpreter[0].reference",
@@ -252,6 +261,7 @@
   "constants": {
     "resourceType": "Bundle",
     "type": "transaction",
+    "id": "LabResult",
 
 
     "resourceTypeTask": "Task",
@@ -282,10 +292,11 @@
     "codeDiagnosticReport": "25836-8",
     "displayDiagnosticReport": "HIV 1 RNA [#/volume] (viral load) in Specimen by NAA with probe detection",
     "textDiagnosticReport": "Test Type",
-    "effectiveDateTimeDiagnosticReport": "2020-09-07",
     "timeDiagnosticReport": "2015-02-07T13:28:17-05:00",
     "notetextDiagnosticReport": "additional notes here",
     "methodDiagnosticReport": "PUT",
+    "diagnosticReportTextStatus": "extensions",
+    "diagnosticReportTextDiv": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative: Specimen</b><a name=\"VLSpecimenExample\"> </a></p><div style=\"display: inline-block; background-color: #d9e0e7; padding: 6px; margin: 4px; border: 1px solid #8da1b4; border-radius: 5px; line-height: 60%\"><p style=\"margin-bottom: 0px\">Resource Specimen &quot;VLSpecimenExample&quot; </p><p style=\"margin-bottom: 0px\">Profile: <a href=\"StructureDefinition-viral-load-specimen.html\">Viral Load Specimen</a></p></div><p><b>Sample reordered</b>: false</p><p><b>identifier</b>: App sample identifier:\u00a0abc123, Remote sample identifier:\u00a0def456, Sample identifier:\u00a0ghi789</p><p><b>type</b>: Specimen Type <span style=\"background: LightGoldenRodYellow; margin: 4px; border: 1px solid khaki\"> (<a href=\"https://browser.ihtsdotools.org/\">SNOMED CT</a>#119361006 &quot;Plasma specimen (specimen)&quot;)</span></p><p><b>subject</b>: <a href=\"Patient-HIVPatientExample.html\">Patient/HIVPatientExample</a> &quot; SMITH&quot;</p><p><b>receivedTime</b>: 2022-07-28</p><h3>Collections</h3><table class=\"grid\"><tr><td>-</td><td><b>Collected[x]</b></td></tr><tr><td>*</td><td>2022-07-28</td></tr></table><h3>Processings</h3><table class=\"grid\"><tr><td>-</td><td><b>Time[x]</b></td></tr><tr><td>*</td><td>2022-07-28</td></tr></table><p><b>note</b>: additional notes here (By Organization/HIVOrganizationExample @7 Feb 2015, 20:28:17)</p></div>",
 
 
     "resourceTypeObsHivTestResult": "Observation",
@@ -349,8 +360,7 @@
         "headers": {
           "contentType": "application/json"
         },
-        "url": "http://rwanda-custom-mapping-mediator:8084/lab-orders"
-
+        "url": "http://openhim-core:5001/hapi-fhir-jpaserver/fhir/"
       },
       "extract": {
         "JeMPIResponse": "$.body"

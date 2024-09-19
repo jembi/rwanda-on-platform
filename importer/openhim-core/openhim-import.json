@@ -31,7 +31,7 @@
     {
       "name": "FHIR Server",
       "description": "A FHIR server (HAPI FHIR)",
-      "urlPattern": "^/raw-fhir.*$",
+      "urlPattern": "^/hapi-fhir-jpaserver/fhir.*$",
       "isAsynchronousProcess": false,
       "methods": [
         "GET",
@@ -53,10 +53,10 @@
           "type": "http",
           "status": "enabled",
           "secured": false,
-          "host": "hapi-fhir",
-          "port": 8080,
+          "host": "197.243.18.12",
+          "port": 8085,
           "path": "",
-          "pathTransform": "s/raw-//g",
+          "pathTransform": "",
           "primary": true,
           "username": "",
           "password": "",
@@ -80,7 +80,7 @@
       "autoRetryEnabled": false,
       "autoRetryPeriodMinutes": 60,
       "updatedBy": {
-        "id": "667d76cff305884a415ea9b1",
+        "id": "66bca8368e4b6e6029568565",
         "name": "Super User"
       }
     },
@@ -133,6 +133,7 @@
       "txViewAcl": [],
       "txViewFullAcl": [],
       "txRerunAcl": [],
+      "alerts": [],
       "status": "enabled",
       "rewriteUrls": false,
       "addAutoRewriteRules": true,
@@ -140,14 +141,13 @@
       "autoRetryEnabled": false,
       "autoRetryPeriodMinutes": 60,
       "updatedBy": {
-        "id": "667d76cff305884a415ea9b1",
+        "id": "66bca8368e4b6e6029568565",
         "name": "Super User"
-      },
-      "alerts": []
+      }
     },
     {
-      "name": "EMR Lab Order",
-      "urlPattern": "^/emr-lab-order$",
+      "name": "Get Lab Results",
+      "urlPattern": "^^/get-lab-results.*$$",
       "isAsynchronousProcess": false,
       "methods": [
         "GET",
@@ -171,13 +171,13 @@
       "authType": "public",
       "routes": [
         {
-          "name": "Generate Lab Source ID",
+          "name": "Get Lab Results",
           "type": "http",
           "status": "enabled",
           "secured": false,
           "host": "rwanda-custom-mapping-mediator",
           "port": 8084,
-          "path": "/lab-orders-source-id",
+          "path": "",
           "pathTransform": "",
           "primary": true,
           "username": "",
@@ -194,6 +194,7 @@
       "txViewAcl": [],
       "txViewFullAcl": [],
       "txRerunAcl": [],
+      "alerts": [],
       "status": "enabled",
       "rewriteUrls": false,
       "addAutoRewriteRules": true,
@@ -201,14 +202,12 @@
       "autoRetryEnabled": false,
       "autoRetryPeriodMinutes": 60,
       "updatedBy": {
-        "id": "667d76cff305884a415ea9b1",
+        "id": "66bca8368e4b6e6029568565",
         "name": "Super User"
-      },
-      "alerts": [],
-      "priority": 2
+      }
     },
     {
-      "name": "VLSM And FHIR Lab Order",
+      "name": "FHIR Lab Order UUID Generation",
       "urlPattern": "^/vlsm/order$",
       "isAsynchronousProcess": false,
       "methods": [
@@ -223,6 +222,7 @@
         "PATCH"
       ],
       "type": "http",
+      "priority": 2,
       "tcpPort": null,
       "tcpHost": null,
       "pollingSchedule": null,
@@ -256,6 +256,7 @@
       "txViewAcl": [],
       "txViewFullAcl": [],
       "txRerunAcl": [],
+      "alerts": [],
       "status": "enabled",
       "rewriteUrls": false,
       "addAutoRewriteRules": true,
@@ -263,14 +264,12 @@
       "autoRetryEnabled": false,
       "autoRetryPeriodMinutes": 60,
       "updatedBy": {
-        "id": "667d76cff305884a415ea9b1",
+        "id": "66bca8368e4b6e6029568565",
         "name": "Super User"
-      },
-      "alerts": [],
-      "priority": 2
+      }
     },
     {
-      "name": "Smart FHIR",
+      "name": "Lab Order FHIR",
       "urlPattern": "^/lab-order$",
       "isAsynchronousProcess": false,
       "methods": [
@@ -285,6 +284,7 @@
         "PATCH"
       ],
       "type": "http",
+      "priority": 3,
       "tcpPort": null,
       "tcpHost": null,
       "pollingSchedule": null,
@@ -318,6 +318,7 @@
       "txViewAcl": [],
       "txViewFullAcl": [],
       "txRerunAcl": [],
+      "alerts": [],
       "status": "enabled",
       "rewriteUrls": false,
       "addAutoRewriteRules": true,
@@ -325,7 +326,128 @@
       "autoRetryEnabled": false,
       "autoRetryPeriodMinutes": 60,
       "updatedBy": {
-        "id": "667d76cff305884a415ea9b1",
+        "id": "66bca8368e4b6e6029568565",
+        "name": "Super User"
+      }
+    },
+    {
+      "name": "Post VLSM Lab Results To FHIR",
+      "urlPattern": "^/lab-results$",
+      "isAsynchronousProcess": false,
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT",
+        "OPTIONS",
+        "HEAD",
+        "TRACE",
+        "CONNECT",
+        "PATCH"
+      ],
+      "type": "http",
+      "tcpPort": null,
+      "tcpHost": null,
+      "pollingSchedule": null,
+      "requestBody": true,
+      "responseBody": true,
+      "allow": [],
+      "whitelist": [],
+      "authType": "public",
+      "routes": [
+        {
+          "name": "Post Lab Result Mediator",
+          "type": "http",
+          "status": "enabled",
+          "secured": false,
+          "host": "rwanda-custom-mapping-mediator",
+          "port": 8084,
+          "path": "",
+          "pathTransform": "",
+          "primary": true,
+          "username": "",
+          "password": "",
+          "forwardAuthHeader": false
+        }
+      ],
+      "matchContentTypes": [],
+      "matchContentRegex": null,
+      "matchContentXpath": null,
+      "matchContentJson": null,
+      "matchContentValue": null,
+      "properties": [],
+      "txViewAcl": [],
+      "txViewFullAcl": [],
+      "txRerunAcl": [],
+      "alerts": [],
+      "status": "enabled",
+      "rewriteUrls": false,
+      "addAutoRewriteRules": true,
+      "rewriteUrlsConfig": [],
+      "autoRetryEnabled": false,
+      "autoRetryPeriodMinutes": 60,
+      "updatedBy": {
+        "id": "66bca8368e4b6e6029568565",
+        "name": "Super User"
+      }
+    },
+    {
+      "name": "OpenHIM Mapping Mediator",
+      "urlPattern": "^/endpoints.*$",
+      "isAsynchronousProcess": false,
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE",
+        "PUT",
+        "OPTIONS",
+        "HEAD",
+        "TRACE",
+        "CONNECT",
+        "PATCH"
+      ],
+      "type": "http",
+      "tcpPort": null,
+      "tcpHost": null,
+      "pollingSchedule": null,
+      "requestBody": true,
+      "responseBody": true,
+      "allow": [],
+      "whitelist": [],
+      "authType": "public",
+      "routes": [
+        {
+          "name": "Mapping Mediator",
+          "type": "http",
+          "status": "enabled",
+          "secured": false,
+          "host": "openhim-mapping-mediator",
+          "port": 3003,
+          "path": "",
+          "pathTransform": "",
+          "primary": true,
+          "username": "",
+          "password": "",
+          "forwardAuthHeader": false
+        }
+      ],
+      "matchContentTypes": [],
+      "matchContentRegex": null,
+      "matchContentXpath": null,
+      "matchContentJson": null,
+      "matchContentValue": null,
+      "properties": [],
+      "txViewAcl": [],
+      "txViewFullAcl": [],
+      "txRerunAcl": [],
+      "status": "enabled",
+      "rewriteUrls": false,
+      "addAutoRewriteRules": true,
+      "rewriteUrlsConfig": [],
+      "autoRetryEnabled": false,
+      "autoRetryPeriodMinutes": 60,
+      "updatedBy": {
+        "id": "66bca8368e4b6e6029568565",
         "name": "Super User"
       },
       "alerts": []
@@ -349,8 +471,8 @@
       ],
       "defaultChannelConfig": [],
       "configDefs": [],
-      "_lastHeartbeat": "2024-06-28T06:12:25.042Z",
-      "_uptime": 20155.843693203
+      "_lastHeartbeat": "2024-08-14T13:18:59.080Z",
+      "_uptime": 1651.129535758
     }
   ],
   "ContactGroups": []
